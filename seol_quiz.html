@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness & Longevity Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .quiz-container { max-width: 600px; margin: auto; }
+        .question { font-size: 18px; margin-bottom: 10px; }
+        .options { list-style-type: none; padding: 0; }
+        .options li { margin-bottom: 10px; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+        .result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Fitness & Longevity Quiz</h2>
+        <div id="quiz"></div>
+        <button onclick="submitQuiz()">Submit</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            // Easy Questions
+            { question: "What is the primary function of sleep?", options: ["Digest food", "Repair and recover the body", "Increase adrenaline", "Reduce muscle mass"], answer: "Repair and recover the body" },
+            { question: "Which nutrient is essential for muscle repair?", options: ["Protein", "Carbohydrates", "Fats", "Vitamins"], answer: "Protein" },
+            { question: "What is a key benefit of regular exercise?", options: ["Increases stress hormones", "Improves heart health", "Weakens bones", "Slows metabolism"], answer: "Improves heart health" },
+            { question: "Which factor contributes most to weight gain?", options: ["Excess calorie intake", "Eating only vegetables", "Drinking water", "Regular exercise"], answer: "Excess calorie intake" },
+            { question: "What is the best way to improve cardiovascular health?", options: ["High-intensity interval training", "Avoiding all exercise", "Eating sugar before bed", "Reducing sleep hours"], answer: "High-intensity interval training" },
+            { question: "Why is hydration important for the body?", options: ["It supports digestion", "It builds muscle", "It decreases oxygen levels", "It makes you sleepy"], answer: "It supports digestion" },
+            { question: "Which type of exercise builds muscle strength?", options: ["Resistance training", "Walking", "Stretching", "Meditation"], answer: "Resistance training" },
+            { question: "Which macronutrient provides the most energy per gram?", options: ["Protein", "Carbohydrates", "Fats", "Fiber"], answer: "Fats" },
+            { question: "What is the most effective way to lose fat?", options: ["Caloric deficit", "Drinking coffee", "Skipping breakfast", "Taking supplements only"], answer: "Caloric deficit" },
+            { question: "Which sleep habit is recommended for better recovery?", options: ["Consistent sleep schedule", "Watching TV before bed", "Drinking coffee late at night", "Sleeping at random times"], answer: "Consistent sleep schedule" },
+            
+            // Difficult Questions
+            { question: "Which neurotransmitter is most influenced by high-quality sleep and regulates mood?", options: ["Dopamine", "Serotonin", "GABA", "Cortisol"], answer: "Serotonin" },
+            { question: "What is the primary benefit of nasal breathing during sleep?", options: ["Increases oxygen uptake efficiency", "Prevents dehydration", "Enhances deep sleep stages", "Reduces stress hormone secretion"], answer: "Increases oxygen uptake efficiency" },
+            { question: "Which molecule accumulates in the brain during wakefulness and contributes to sleep pressure?", options: ["Glutamate", "Melatonin", "Adenosine", "Dopamine"], answer: "Adenosine" },
+            { question: "How does fasting enhance mitochondrial efficiency?", options: ["Increases glycolysis", "Enhances autophagy", "Decreases oxidative phosphorylation", "Lowers ATP production"], answer: "Enhances autophagy" },
+            { question: "Which heart rate variability (HRV) pattern indicates a well-recovered nervous system?", options: ["High variability", "Low variability", "Consistent peaks", "Random fluctuations"], answer: "High variability" },
+            { question: "Which training method optimizes Type II muscle fiber hypertrophy?", options: ["Low-intensity steady-state cardio", "High-rep endurance training", "Explosive resistance training", "Isometric holds"], answer: "Explosive resistance training" },
+            { question: "What dietary component most effectively stimulates mTOR for muscle growth?", options: ["Carbohydrates", "Omega-3 fatty acids", "Leucine", "Fiber"], answer: "Leucine" },
+            { question: "What is the optimal fasting duration to maximize stem cell regeneration?", options: ["12 hours", "24 hours", "48 hours", "72 hours"], answer: "72 hours" },
+            { question: "Which sleep stage is crucial for motor skill memory consolidation?", options: ["Light sleep", "Deep sleep", "REM sleep", "Wakeful rest"], answer: "REM sleep" },
+            { question: "Which of the following contributes most significantly to metabolic flexibility?", options: ["Consuming high-protein meals", "Practicing intermittent fasting", "Eating low-fat diets", "Consistently consuming carbohydrates"], answer: "Practicing intermittent fasting" }
+        ];
+
+        const quizContainer = document.getElementById("quiz");
+
+        function loadQuiz() {
+            quizData.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+                questionDiv.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+
+                const optionsList = document.createElement("ul");
+                optionsList.classList.add("options");
+                q.options.forEach(option => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<input type="radio" name="q${index}" value="${option}"> ${option}`;
+                    optionsList.appendChild(li);
+                });
+                
+                questionDiv.appendChild(optionsList);
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name=q${index}]:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            document.getElementById("result").innerText = `You scored ${score} out of ${quizData.length}`;
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>
