@@ -1,1 +1,0 @@
-SEOL Quiz Test
