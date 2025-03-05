@@ -1,5 +1,3 @@
-<!-- Write your comments here 1234-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +12,8 @@
         .options li { margin-bottom: 10px; }
         button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
         .result { margin-top: 20px; font-weight: bold; }
+        .correct { color: green; }
+        .incorrect { color: red; }
     </style>
 </head>
 <body>
@@ -26,7 +26,6 @@
 
     <script>
         const quizData = [
-            // Easy Questions
             { question: "What is the primary function of sleep?", options: ["Digest food", "Repair and recover the body", "Increase adrenaline", "Reduce muscle mass"], answer: "Repair and recover the body" },
             { question: "Which nutrient is essential for muscle repair?", options: ["Protein", "Carbohydrates", "Fats", "Vitamins"], answer: "Protein" },
             { question: "What is a key benefit of regular exercise?", options: ["Increases stress hormones", "Improves heart health", "Weakens bones", "Slows metabolism"], answer: "Improves heart health" },
@@ -37,8 +36,6 @@
             { question: "Which macronutrient provides the most energy per gram?", options: ["Protein", "Carbohydrates", "Fats", "Fiber"], answer: "Fats" },
             { question: "What is the most effective way to lose fat?", options: ["Caloric deficit", "Drinking coffee", "Skipping breakfast", "Taking supplements only"], answer: "Caloric deficit" },
             { question: "Which sleep habit is recommended for better recovery?", options: ["Consistent sleep schedule", "Watching TV before bed", "Drinking coffee late at night", "Sleeping at random times"], answer: "Consistent sleep schedule" },
-            
-            // Difficult Questions
             { question: "Which neurotransmitter is most influenced by high-quality sleep and regulates mood?", options: ["Dopamine", "Serotonin", "GABA", "Cortisol"], answer: "Serotonin" },
             { question: "What is the primary benefit of nasal breathing during sleep?", options: ["Increases oxygen uptake efficiency", "Prevents dehydration", "Enhances deep sleep stages", "Reduces stress hormone secretion"], answer: "Increases oxygen uptake efficiency" },
             { question: "Which molecule accumulates in the brain during wakefulness and contributes to sleep pressure?", options: ["Glutamate", "Melatonin", "Adenosine", "Dopamine"], answer: "Adenosine" },
@@ -47,8 +44,7 @@
             { question: "Which training method optimizes Type II muscle fiber hypertrophy?", options: ["Low-intensity steady-state cardio", "High-rep endurance training", "Explosive resistance training", "Isometric holds"], answer: "Explosive resistance training" },
             { question: "What dietary component most effectively stimulates mTOR for muscle growth?", options: ["Carbohydrates", "Omega-3 fatty acids", "Leucine", "Fiber"], answer: "Leucine" },
             { question: "What is the optimal fasting duration to maximize stem cell regeneration?", options: ["12 hours", "24 hours", "48 hours", "72 hours"], answer: "72 hours" },
-            { question: "Which sleep stage is crucial for motor skill memory consolidation?", options: ["Light sleep", "Deep sleep", "REM sleep", "Wakeful rest"], answer: "REM sleep" },
-            { question: "Which of the following contributes most significantly to metabolic flexibility?", options: ["Consuming high-protein meals", "Practicing intermittent fasting", "Eating low-fat diets", "Consistently consuming carbohydrates"], answer: "Practicing intermittent fasting" }
+            { question: "Which sleep stage is crucial for motor skill memory consolidation?", options: ["Light sleep", "Deep sleep", "REM sleep", "Wakeful rest"], answer: "REM sleep" }
         ];
 
         const quizContainer = document.getElementById("quiz");
@@ -68,6 +64,7 @@
                 });
                 
                 questionDiv.appendChild(optionsList);
+                questionDiv.innerHTML += `<p id="feedback${index}" class="result"></p>`;
                 quizContainer.appendChild(questionDiv);
             });
         }
@@ -76,8 +73,20 @@
             let score = 0;
             quizData.forEach((q, index) => {
                 const selected = document.querySelector(`input[name=q${index}]:checked`);
-                if (selected && selected.value === q.answer) {
-                    score++;
+                const feedback = document.getElementById(`feedback${index}`);
+                
+                if (selected) {
+                    if (selected.value === q.answer) {
+                        score++;
+                        feedback.innerHTML = "Correct!";
+                        feedback.classList.add("correct");
+                    } else {
+                        feedback.innerHTML = `Incorrect. The correct answer is: ${q.answer}`;
+                        feedback.classList.add("incorrect");
+                    }
+                } else {
+                    feedback.innerHTML = `No answer selected. The correct answer is: ${q.answer}`;
+                    feedback.classList.add("incorrect");
                 }
             });
             document.getElementById("result").innerText = `You scored ${score} out of ${quizData.length}`;
