@@ -6,7 +6,7 @@
     <title>Fitness & Longevity Quiz</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        .quiz-container { max-width: 600px; margin: auto; }
+        .quiz-container { max-width: 600px; margin: auto; text-align: center; }
         .question { font-size: 18px; margin-bottom: 10px; }
         .options { list-style-type: none; padding: 0; }
         .options li { margin-bottom: 10px; }
@@ -14,37 +14,55 @@
         .result { margin-top: 20px; font-weight: bold; }
         .correct { color: green; }
         .incorrect { color: red; }
+        .open-ended-container { margin-top: 20px; text-align: left; }
+        .open-ended-question { margin-bottom: 10px; }
+        textarea { width: 100%; height: 80px; }
+        .ai-response { margin-top: 5px; font-style: italic; color: blue; }
     </style>
 </head>
 <body>
     <div class="quiz-container">
         <h2>Fitness & Longevity Quiz</h2>
+        <img src="https://source.unsplash.com/600x300/?fitness,health" alt="Fitness Image" style="width:100%; border-radius:10px; margin-bottom:20px;">
         <div id="quiz"></div>
         <button onclick="submitQuiz()">Submit</button>
         <div id="result" class="result"></div>
+        
+        <div class="open-ended-container">
+            <h3>Open-Ended Questions</h3>
+            <div class="open-ended-question">
+                <p>1. What are your personal fitness goals, and how do you plan to achieve them?</p>
+                <textarea id="qOpen1"></textarea>
+                <p id="response1" class="ai-response"></p>
+            </div>
+            <div class="open-ended-question">
+                <p>2. What do you think is the most important factor for longevity?</p>
+                <textarea id="qOpen2"></textarea>
+                <p id="response2" class="ai-response"></p>
+            </div>
+            <div class="open-ended-question">
+                <p>3. How does sleep impact your daily performance and well-being?</p>
+                <textarea id="qOpen3"></textarea>
+                <p id="response3" class="ai-response"></p>
+            </div>
+            <div class="open-ended-question">
+                <p>4. Describe a challenge you've faced in maintaining a healthy lifestyle and how you overcame it.</p>
+                <textarea id="qOpen4"></textarea>
+                <p id="response4" class="ai-response"></p>
+            </div>
+            <div class="open-ended-question">
+                <p>5. How do you currently incorporate mobility exercises into your routine?</p>
+                <textarea id="qOpen5"></textarea>
+                <p id="response5" class="ai-response"></p>
+            </div>
+            <button onclick="evaluateOpenEnded()">Submit Open-Ended Answers</button>
+        </div>
     </div>
 
     <script>
         const quizData = [
             { question: "What is the primary function of sleep?", options: ["Digest food", "Repair and recover the body", "Increase adrenaline", "Reduce muscle mass"], answer: "Repair and recover the body" },
             { question: "Which nutrient is essential for muscle repair?", options: ["Protein", "Carbohydrates", "Fats", "Vitamins"], answer: "Protein" },
-            { question: "What is a key benefit of regular exercise?", options: ["Increases stress hormones", "Improves heart health", "Weakens bones", "Slows metabolism"], answer: "Improves heart health" },
-            { question: "Which factor contributes most to weight gain?", options: ["Excess calorie intake", "Eating only vegetables", "Drinking water", "Regular exercise"], answer: "Excess calorie intake" },
-            { question: "What is the best way to improve cardiovascular health?", options: ["High-intensity interval training", "Avoiding all exercise", "Eating sugar before bed", "Reducing sleep hours"], answer: "High-intensity interval training" },
-            { question: "Why is hydration important for the body?", options: ["It supports digestion", "It builds muscle", "It decreases oxygen levels", "It makes you sleepy"], answer: "It supports digestion" },
-            { question: "Which type of exercise builds muscle strength?", options: ["Resistance training", "Walking", "Stretching", "Meditation"], answer: "Resistance training" },
-            { question: "Which macronutrient provides the most energy per gram?", options: ["Protein", "Carbohydrates", "Fats", "Fiber"], answer: "Fats" },
-            { question: "What is the most effective way to lose fat?", options: ["Caloric deficit", "Drinking coffee", "Skipping breakfast", "Taking supplements only"], answer: "Caloric deficit" },
-            { question: "Which sleep habit is recommended for better recovery?", options: ["Consistent sleep schedule", "Watching TV before bed", "Drinking coffee late at night", "Sleeping at random times"], answer: "Consistent sleep schedule" },
-            { question: "Which neurotransmitter is most influenced by high-quality sleep and regulates mood?", options: ["Dopamine", "Serotonin", "GABA", "Cortisol"], answer: "Serotonin" },
-            { question: "What is the primary benefit of nasal breathing during sleep?", options: ["Increases oxygen uptake efficiency", "Prevents dehydration", "Enhances deep sleep stages", "Reduces stress hormone secretion"], answer: "Increases oxygen uptake efficiency" },
-            { question: "Which molecule accumulates in the brain during wakefulness and contributes to sleep pressure?", options: ["Glutamate", "Melatonin", "Adenosine", "Dopamine"], answer: "Adenosine" },
-            { question: "How does fasting enhance mitochondrial efficiency?", options: ["Increases glycolysis", "Enhances autophagy", "Decreases oxidative phosphorylation", "Lowers ATP production"], answer: "Enhances autophagy" },
-            { question: "Which heart rate variability (HRV) pattern indicates a well-recovered nervous system?", options: ["High variability", "Low variability", "Consistent peaks", "Random fluctuations"], answer: "High variability" },
-            { question: "Which training method optimizes Type II muscle fiber hypertrophy?", options: ["Low-intensity steady-state cardio", "High-rep endurance training", "Explosive resistance training", "Isometric holds"], answer: "Explosive resistance training" },
-            { question: "What dietary component most effectively stimulates mTOR for muscle growth?", options: ["Carbohydrates", "Omega-3 fatty acids", "Leucine", "Fiber"], answer: "Leucine" },
-            { question: "What is the optimal fasting duration to maximize stem cell regeneration?", options: ["12 hours", "24 hours", "48 hours", "72 hours"], answer: "72 hours" },
-            { question: "Which sleep stage is crucial for motor skill memory consolidation?", options: ["Light sleep", "Deep sleep", "REM sleep", "Wakeful rest"], answer: "REM sleep" }
         ];
 
         const quizContainer = document.getElementById("quiz");
@@ -90,6 +108,21 @@
                 }
             });
             document.getElementById("result").innerText = `You scored ${score} out of ${quizData.length}`;
+        }
+
+        function evaluateOpenEnded() {
+            const responses = [
+                "That’s a great approach! Setting clear goals and tracking progress can help you stay motivated.",
+                "Longevity is complex, but nutrition, movement, and stress management play crucial roles.",
+                "Sleep impacts cognitive function, energy levels, and even metabolism. Prioritizing quality rest is key.",
+                "Overcoming obstacles is part of growth. Adapting new strategies helps build resilience.",
+                "Mobility work is essential for injury prevention and long-term health. Keep it consistent!"
+            ];
+            for (let i = 1; i <= 5; i++) {
+                let userAnswer = document.getElementById(`qOpen${i}`).value.trim();
+                let responseElement = document.getElementById(`response${i}`);
+                responseElement.innerHTML = userAnswer ? responses[i - 1] : "Please provide an answer.";
+            }
         }
 
         loadQuiz();
